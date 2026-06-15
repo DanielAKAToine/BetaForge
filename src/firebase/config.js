@@ -4,18 +4,12 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyCCrRNGsQOGm9qU4OA5KkpFofJSkyRhxoA",
-
-    authDomain: "betaforge-4fc15.firebaseapp.com",
-
-    projectId: "betaforge-4fc15",
-
-    storageBucket: "betaforge-4fc15.firebasestorage.app",
-
-    messagingSenderId: "42551773632",
-
-    appId: "1:42551773632:web:da9b3aef11eee606262025"
-
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
