@@ -1,0 +1,78 @@
+.registerContainer {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #1a1a1a;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-family: sans-serif;
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+}
+
+.formGroup {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.formGroup label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.formGroup input,
+.formGroup select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background-color: #252525;
+    color: white;
+    font-size: 15px;
+}
+
+.developerSection {
+    background-color: #252525;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    border-left: 4px solid #00adb5;
+}
+
+.developerSection h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #00adb5;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00adb5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.submitBtn:hover {
+    background-color: #008c95;
+}
+
+.error {
+    color: #ff4a4a;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 14px;
+}
