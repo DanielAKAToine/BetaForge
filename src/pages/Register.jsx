@@ -3,6 +3,8 @@ import styles from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
+import { toast } from 'react-toastify';
+import { sendEmailVerification } from 'firebase/auth';
 
 
 export default function Register() {
@@ -68,15 +70,21 @@ export default function Register() {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            await sendEmailVerification(userCredential.user);
+
+            toast.success('Account created successfully! Please check your email to verify your account.')
+
             navigate('/login');
         } catch (err) {
+            console.error(err.code);
             if (err.code === 'auth/email-already-in-use') {
                 setError('This email is already registered.');
             } else if (err.code === 'auth/invalid-email') {
                 setError('Please enter a valid email address.');
             } else {
-                setError('An error occurred during registration. Please try again later.');
+                setError('An error occurred during registration.');
             }
         }
 
