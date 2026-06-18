@@ -12,6 +12,8 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+console.log("A minha API Key detetada é:", import.meta.env.VITE_FIREBASE_API_KEY);
+
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);

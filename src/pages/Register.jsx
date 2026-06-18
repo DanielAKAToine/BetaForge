@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import styles from './Register.module.css';
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 
 export default function Register() {
+    const navigate = useNavigate();
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -15,10 +20,9 @@ export default function Register() {
     const [mainProject, setMainProject] = useState('');
     const [studioName, setStudioName] = useState('');
 
-
     const [error, setError] = useState('');
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
 
@@ -63,7 +67,19 @@ export default function Register() {
             return;
         }
 
-        alert("Registration successful! Welcome to BetaForge.");
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate('/login');
+        } catch (err) {
+            if (err.code === 'auth/email-already-in-use') {
+                setError('This email is already registered.');
+            } else if (err.code === 'auth/invalid-email') {
+                setError('Please enter a valid email address.');
+            } else {
+                setError('An error occurred during registration. Please try again later.');
+            }
+        }
+
     };
 
     return (
