@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-family: sans-serif;
+  background-color: #121214;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.25) contrast(1.05) saturate(1.1);
+  animation: changeBackground 30s infinite ease-in-out;
+  }
+
+@keyframes changeBackground {
+  0%, 13% {
+    background-image: url('https://d1ygf46rsya1tb.cloudfront.net/prod/uploads/2020/09/alexey-savchenko-k4Akpt5-Sfk-unsplash.jpg');
+    opacity: 1;
+  }
+  16%, 29% {
+    background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FtaW5nJTIwa2V5Ym9hcmR8ZW58MHx8MHx8fDA%3D');
+    opacity: 1;
+  }
+  32%, 45% {
+    background-image: url('https://images8.alphacoders.com/860/thumb-1920-860215.jpg');
+    opacity: 1;
+  }
+  48%, 61% {
+    background-image: url('https://wallpapers.com/images/hd/1920-x-1080-gaming-cyberpunk-city-a2ho6vmdryz2x419.jpg');
+    opacity: 1;
+  }
+  64%, 77% {
+    background-image: url('https://wallpapers.com/images/hd/esports-1590-x-798-wallpaper-jdj9ulcthpn1unrv.jpg');
+    opacity: 1;
+  }
+  80%, 94% {
+    background-image: url('https://wallpapercave.com/wp/wp2276152.jpg');
+    opacity: 1;
+  }
+  100% {
+    background-image: url('https://d1ygf46rsya1tb.cloudfront.net/prod/uploads/2020/09/alexey-savchenko-k4Akpt5-Sfk-unsplash.jpg');
+    opacity: 1;
+  }
+}
+

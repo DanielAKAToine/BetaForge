@@ -1,0 +1,83 @@
+.homeContainer {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.heroSection {
+  background: linear-gradient(135deg, #1e1e24 0%, #2a2a32 100%);
+  padding: 60px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid #3f3f4e;
+  margin-bottom: 40px;
+}
+
+.heroSection h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  background: linear-gradient(45deg, #00adb5, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.heroSection p {
+  font-size: 1.2rem;
+  color: #ccc;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  line-height: 1.6;
+}
+
+.ctaBtn {
+  padding: 14px 35px;
+  background-color: #00adb5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.ctaBtn:hover {
+  background-color: #008c95;
+  transform: translateY(-2px);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.featureCard {
+  background-color: #1e1e24; /* Casar com o tom do hero */
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #2d2d38;
+  transition: border-color 0.3s, transform 0.2s;
+}
+
+.featureCard:hover {
+  border-color: #00adb5;
+  transform: translateY(-5px);
+}
+
+.featureCard h3 {
+  color: #00adb5;
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+}
+
+.featureCard p {
+  color: #aaa;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
