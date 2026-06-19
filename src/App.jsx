@@ -5,10 +5,12 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BackgroundSlider from './components/Background';
 
 export default function App() {
     return (
         <BrowserRouter>
+            <BackgroundSlider />
             <Navbar />
             <div style={{ padding: '20px' }}>
                 <Routes>

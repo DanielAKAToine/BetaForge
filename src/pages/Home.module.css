@@ -20,6 +20,7 @@
   font-size: 3rem;
   margin-bottom: 15px;
   background: linear-gradient(45deg, #00adb5, #00f2fe);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -58,7 +59,8 @@
 }
 
 .featureCard {
-  background-color: #1e1e24; /* Casar com o tom do hero */
+  background-color: #1e1e24;
+  /* Casar com o tom do hero */
   padding: 25px;
   border-radius: 8px;
   border: 1px solid #2d2d38;
