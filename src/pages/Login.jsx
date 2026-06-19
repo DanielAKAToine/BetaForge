@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styles from "./Login.module.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 
 
 export default function Login() {

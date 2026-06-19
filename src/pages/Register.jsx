@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import styles from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { toast } from 'react-toastify';
-import { sendEmailVerification } from 'firebase/auth';
 
 
 export default function Register() {
@@ -17,6 +16,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [profileType, setProfileType] = useState('player');
+    const [loading, setLoading] = useState(false);
 
     const [devType, setDevType] = useState('independent');
     const [mainProject, setMainProject] = useState('');
@@ -71,12 +71,11 @@ export default function Register() {
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
             await sendEmailVerification(userCredential.user);
-
+            await signOut(auth);
             toast.success('Account created successfully! Please check your email to verify your account.')
-
             navigate('/login');
+
         } catch (err) {
             console.error(err.code);
             if (err.code === 'auth/email-already-in-use') {
@@ -86,6 +85,9 @@ export default function Register() {
             } else {
                 setError('An error occurred during registration.');
             }
+        }
+        finally {
+            setLoading(false);
         }
 
     };
@@ -199,7 +201,9 @@ export default function Register() {
                         </div>
                     </div>
                 )}
-                <button type="submit" className={styles.submitButton}>Register Account</button>
+                <button type="submit" className={styles.submitButton} disabçed={loading}>
+                    {loading ? 'Creating Account...' : 'Register Account'}
+                </button>
             </form>
         </div>
     );

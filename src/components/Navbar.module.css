@@ -3,8 +3,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background-color: rgba(26, 26, 26, 0.75); /* Semitransparente para ver o fundo */
-  backdrop-filter: blur(8px); /* Efeito de vidro desfocado */
+  background-color: rgba(26, 26, 26, 0.75);
+  /* Semitransparente para ver o fundo */
+  backdrop-filter: blur(8px);
+  /* Efeito de vidro desfocado */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
@@ -26,6 +28,9 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .navLink {
