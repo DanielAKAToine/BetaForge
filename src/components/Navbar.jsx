@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { useEffect, useState } from 'react';
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { toast } from 'react-toastify';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 
@@ -12,12 +13,33 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    const docRef = doc(db, "users", currentUser.uid);
+                    const docSnap = await getDoc(docRef);
+
+                    if
+                        (docSnap.exists()) {
+                        setUser({ ...currentUser, ...docSnap.data() });
+                    } else {
+                        setUser(currentUser)
+                    }
+                }
+                catch (error) {
+                    console.error("Error, no user detected", error);
+                    setUser(currentUser);
+                }
+            }
+            else {
+                setUser(null);
+            }
         });
+
 
         return () => unsubscribe();
     }, []);
+
 
     const handleLogout = async (e) => {
         e.preventDefault();

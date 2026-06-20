@@ -2,8 +2,9 @@ import { useState } from 'react';
 import styles from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import { doc, setDoc } from 'firebase/firestore';
 
 
 export default function Register() {
@@ -71,6 +72,22 @@ export default function Register() {
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            await setDoc(doc(db, "users", user.uid), {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                birthdate: birthdate,
+                profileType: profileType,
+                createAt: new Date(),
+                ...(profileType === 'developer' && {
+                    devType: devType,
+                    mainProject: mainProject,
+                    studioName: devType === 'studio' ? studioName : null,
+                })
+            });
+
             await sendEmailVerification(userCredential.user);
             await signOut(auth);
             toast.success('Account created successfully! Please check your email to verify your account.')
