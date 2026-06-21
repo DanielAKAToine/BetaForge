@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BackgroundSlider from './components/Background';
 import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
 
 export default function App() {
     return (
@@ -19,6 +20,7 @@ export default function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Routes>
             </div>
             <ToastContainer position="top-center" autoClose={3000} theme="dark" />

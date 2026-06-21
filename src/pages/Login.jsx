@@ -60,6 +60,7 @@ export default function Login() {
     }
 
 
+
     return (
         <div className={styles.loginContainer}>
             <h2>Login to BetaForge</h2>
@@ -84,6 +85,12 @@ export default function Login() {
                         placeholder="Enter your password"
                         disabled={loading}
                     />
+                </div>
+                <div className={styles.forgotPasswordContainer}>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/forgot-password')}
+                        className={styles.forgotBtn}> Forgot Password?</button>
                 </div>
                 <button type="submit" className={styles.submitBtn} disabled={loading}>
                     {loading ? "Signing In..." : "Sign In"}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { auth, db } from '../firebase/config';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import styles from './Profile.module.css';
@@ -34,6 +34,25 @@ export default function Profile() {
 
         return () => unsubscribe();
     }, []);
+
+    const handleResetPassword = async () => {
+
+        try {
+            const user = auth.currentUser;
+            if (!user || !user.email) {
+                toast.error("User email not found");
+                return;
+            }
+
+            await sendPasswordResetEmail(auth, user.email);
+            toast.success("Password reset email sent! Check your inbox.");
+        }
+        catch (error) {
+            console.error("Error sending reset email", error);
+            toast.error("Failed to send reset email. Try again later.");
+        }
+    };
+
 
     const handleUpdateStudio = async (e) => {
         e.preventDefault();
@@ -91,6 +110,7 @@ export default function Profile() {
                     <h3>Personal Information</h3>
                     <p><strong>Email: </strong> {userData.email}</p>
                     <p><strong>Birthdate: </strong> {userData.birthdate}</p>
+                    <button onClick={handleResetPassword} className={styles.passwordBtn}>🔒 Change Password</button>
                 </div>
                 {userData.profileType === 'developer' && (
                     <div className={styles.devSection}>
