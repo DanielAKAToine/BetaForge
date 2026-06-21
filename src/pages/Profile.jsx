@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { auth, db } from '../firebase/config';
 import { onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, addDoc, where, query, getDocs } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import styles from './Profile.module.css';
 
@@ -11,6 +11,10 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);
     const [studioName, setStudioName] = useState('');
     const [editingStudio, setEditingStudio] = useState(false);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+    const [newProjectName, setNewProjectName] = useState('');
+    const [projects, setProjects] = useState([]);
+    const [updatingMainRef, setUpdatingMainRef] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -23,10 +27,21 @@ export default function Profile() {
                         setUserData(data);
                         if (data.studioName)
                             setStudioName(data.studioName);
+
+                        if (data.profileType === 'developer') {
+                            const q = query(collection(db, "projects"), where("developerId", "==", currentUser.uid));
+                            const querySnapshot = await getDocs(q);
+                            const projectsList = [];
+                            querySnapshot.forEach((doc) => {
+                                projectsList.push({ id: doc.id, ...doc.data() });
+                            });
+                            setProjects(projectsList);
+                        }
                     }
                 }
                 catch (error) {
                     console.error("Could'nt load the profile data", error);
+
                 }
             }
             setLoading(false);
@@ -97,6 +112,61 @@ export default function Profile() {
         }
     };
 
+    const handleCreateProject = async (e) => {
+        e.preventDefault();
+
+        if (!newProjectName.trim())
+            return;
+
+        try {
+            const user = auth.currentUser;
+            const docRef = await addDoc(collection(db, "projects"), {
+                name: newProjectName.trim(),
+                developerId: user.uid,
+                studioName: userData.studioName || "Independent Developer",
+                createAt: new Date()
+            });
+
+            const newProjectData = {
+                id: docRef.id,
+                name: newProjectName.trim(),
+                developerId: user.uid,
+                studioName: userData.studioName || "Independent Developer",
+            };
+
+            setProjects(prev => [...prev, newProjectData]);
+            toast.success("Project created successfully!");
+            setNewProjectName('');
+            setIsProjectModalOpen(false);
+        }
+
+        catch (error) {
+            console.error("Error creating project", error);
+            toast.error("Failed to create project. Try again later.");
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+
+    const handleSetMainProject = async (projectName) => {
+        try {
+            const user = auth.currentUser;
+            const docRef = doc(db, "users", user.uid);
+
+            await updateDoc(docRef, {
+                mainProject: projectName
+            });
+
+            setUserData(prev => ({ ...prev, mainProject: projectName }));
+            toast.success(`"${projectName}" set as Main Project!`);
+        } catch (error) {
+            console.error("Error updating main project:", error);
+            toast.error("Failed to update Main Project.");
+        }
+    };
+
     if (loading) return <div className={styles.loading}>Loading Profile...</div>;
     if (!userData) return <div className={styles.error}>Please log in to view your profile.</div>;
 
@@ -115,7 +185,6 @@ export default function Profile() {
                 {userData.profileType === 'developer' && (
                     <div className={styles.devSection}>
                         <h3>Developer Management</h3>
-                        <p><strong>Main Project: </strong>{userData.mainProject}</p>
                         <p><strong>Studio/Company: </strong> {userData.studioName || <em>No studio linked yet</em>}
 
                             {userData.studioName && !editingStudio && (
@@ -151,12 +220,63 @@ export default function Profile() {
                                 </div>
                             </form>
                         )}
+                        <div className={styles.myProjectsSection}>
+                            <h3>My Projects</h3>
+                            {projects.length === 0 ? (
+                                <p className={styles.noProjects}>No projects registered yet.</p>
+                            ) : (
+                                <div className={styles.projectsGrid}>
+                                    {projects.map((project) => {
+                                        const isMain = userData.mainProject === project.name;
+
+                                        return (
+                                            <div key={project.id} className={`${styles.projectCardItem} ${isMain ? styles.mainProjectCard : ''}`}>
+                                                <div className={styles.projectInfoText}>
+                                                    <h4>{project.name}</h4>
+                                                    {isMain && <span className={styles.mainBadge}>👑 Main Project</span>}
+                                                </div>
+                                                {!isMain && (
+                                                    <button
+                                                        onClick={() => handleSetMainProject(project.name)}
+                                                        className={styles.setMainBtn}> Set as Main </button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
                         <hr className={styles.divider} />
-                        <button className={styles.createProjectBtn}>➕ Create New Project </button>
+                        <button onClick={() => setIsProjectModalOpen(true)} className={styles.createProjectBtn}>➕ Create New Project </button>
+
+                        {isProjectModalOpen && (
+                            <div className={styles.modalOverlay}>
+                                <div className={styles.modalContent}>
+                                    <h3>Create New Project</h3>
+                                    <form onSubmit={handleCreateProject}>
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Project Name:</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. SuperCars Extreme Racing"
+                                                value={newProjectName}
+                                                onChange={(e) => setNewProjectName(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        <div className={styles.modalActions}>
+                                            <button type="submit" className={styles.saveBtn}>Create</button>
+                                            <button type="button" onClick={() => setIsProjectModalOpen(false)} className={styles.cancelBtn}>Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 

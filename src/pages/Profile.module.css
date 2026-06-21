@@ -151,10 +151,173 @@
   box-shadow: 0 0 12px #00f2fe;
 }
 
-.saveBtn { background: #00f2fe; color: #000; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;}
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 99999 !important;
+}
 
-.cancelBtn { background: #333; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;}
+.modalContent {
+  background: #121212;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #00f2fe;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  margin: auto !important;
+}
 
-.divider { border: 0; border-top: 1px solid #333; margin: 25px 0; }
+.modalContent h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
 
-.loading, .error { color: #fff; text-align: center; margin-top: 50px; font-size: 1.2rem; }
+.modalInputGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.modalInputGroup label {
+  color: #a0a0a0;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.modalInputGroup input {
+  padding: 10px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+
+
+.saveBtn { 
+  background: #00f2fe;
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px; 
+  cursor: pointer; 
+  font-weight: bold;
+}
+
+.cancelBtn {
+  background: #333; 
+  color: #fff; 
+  border: none; 
+  padding: 8px 15px;
+  border-radius: 4px; 
+  cursor: pointer;
+}
+
+.divider { 
+  border: 0; 
+  border-top: 1px solid #333;
+  margin: 25px 0;
+}
+
+.loading, .error {
+  color: #fff;
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+}
+
+.myProjectsSection {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.myProjectsSection h3 {
+  color: #00f2fe;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 5px;
+}
+
+.noProjects {
+  color: #666;
+  font-style: italic;
+}
+
+.projectsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.projectCardItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #151515;
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.mainProjectCard {
+  border-color: #ff0055;
+  box-shadow: 0 0 8px rgba(255, 0, 85, 0.15);
+  background: #1a0f13;
+}
+
+.projectInfoText h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.mainBadge {
+  color: #ff0055;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.setMainBtn {
+  background: transparent;
+  border: 1px solid #00f2fe;
+  color: #00f2fe;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.setMainBtn:hover {
+  background: #00f2fe;
+  color: #000;
+  box-shadow: 0 0 10px #00f2fe;
+}
