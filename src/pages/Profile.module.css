@@ -29,24 +29,28 @@
   margin-bottom: 20px;
 }
 
-.infoSection, .devSection {
+.infoSection,
+.devSection {
   margin-top: 25px;
   text-align: left;
 }
 
-.infoSection h3, .devSection h3 {
+.infoSection h3,
+.devSection h3 {
   color: #00f2fe;
   border-bottom: 1px solid #333;
   padding-bottom: 8px;
   margin-bottom: 15px;
 }
 
-.infoSection p, .devSection p {
+.infoSection p,
+.devSection p {
   margin: 10px 0;
   font-size: 1.1rem;
 }
 
-.actionBtn, .createProjectBtn {
+.actionBtn,
+.createProjectBtn {
   background: transparent;
   border: 1px solid #00f2fe;
   color: #00f2fe;
@@ -59,7 +63,8 @@
   width: 100%;
 }
 
-.actionBtn:hover, .createProjectBtn:hover {
+.actionBtn:hover,
+.createProjectBtn:hover {
   background: #00f2fe;
   color: #000;
   box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
@@ -167,15 +172,69 @@
 
 .modalContent {
   background: #121212;
-  padding: 30px;
+  padding: 25px;
   border-radius: 8px;
   border: 1px solid #00f2fe;
   box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
   width: 90%;
-  max-width: 400px;
-  text-align: center;
+  max-width: 450px;
+  max-height: 85vh;
+  overflow-y: auto;
   margin: auto !important;
 }
+
+.modalSelect {
+  padding: 10px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300f2fe' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 35px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modalSelect:focus {
+  border-color: #00f2fe;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.2);
+}
+
+.modalSelect option {
+  background: #121212;
+  color: #fff;
+  padding: 10px;
+}
+
+
+.modalTextarea {
+  padding: 10px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.modalDateInput {
+  padding: 10px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+}
+
 
 .modalContent h3 {
   color: #fff;
@@ -213,32 +272,33 @@
 
 
 
-.saveBtn { 
+.saveBtn {
   background: #00f2fe;
   color: #000;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px; 
-  cursor: pointer; 
+  border-radius: 4px;
+  cursor: pointer;
   font-weight: bold;
 }
 
 .cancelBtn {
-  background: #333; 
-  color: #fff; 
-  border: none; 
+  background: #333;
+  color: #fff;
+  border: none;
   padding: 8px 15px;
-  border-radius: 4px; 
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.divider { 
-  border: 0; 
+.divider {
+  border: 0;
   border-top: 1px solid #333;
   margin: 25px 0;
 }
 
-.loading, .error {
+.loading,
+.error {
   color: #fff;
   text-align: center;
   margin-top: 50px;
@@ -320,4 +380,30 @@
   background: #00f2fe;
   color: #000;
   box-shadow: 0 0 10px #00f2fe;
+}
+
+.projectMetadata {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.platformTag,
+.keysTag {
+  font-size: 0.78rem;
+  background: #1c1c1c;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #252525;
+}
+
+.platformTag {
+  color: #00f2fe;
+  border-color: rgba(0, 242, 254, 0.2);
+}
+
+.keysTag {
+  color: #ff0055;
+  border-color: rgba(255, 0, 85, 0.2);
 }

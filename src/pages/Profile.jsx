@@ -14,7 +14,12 @@ export default function Profile() {
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
     const [newProjectName, setNewProjectName] = useState('');
     const [projects, setProjects] = useState([]);
-    const [updatingMainRef, setUpdatingMainRef] = useState(false);
+    const [projectPlatform, setProjectPlatform] = useState('');
+    const [projectKeysAmount, setProjectKeysAmount] = useState('');
+    const [systemRequirements, setSystemRequirements] = useState('');
+    const [rewards, setRewards] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [projectVersion, setProjectVersion] = useState('');
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -115,28 +120,42 @@ export default function Profile() {
     const handleCreateProject = async (e) => {
         e.preventDefault();
 
-        if (!newProjectName.trim())
+        if (!newProjectName.trim() || !projectPlatform || !projectKeysAmount || !systemRequirements.trim() || !rewards.trim() || !endDate) {
+            toast.error("Please fill in all required fields.");
             return;
+        }
 
         try {
             const user = auth.currentUser;
             const docRef = await addDoc(collection(db, "projects"), {
                 name: newProjectName.trim(),
+                platform: projectPlatform,
+                keysAvailable: Number(projectKeysAmount),
+                systemRequirements: systemRequirements.trim(),
+                rewards: rewards.trim(),
+                endDate: endDate,
+                version: projectVersion.trim() || "Alpha/Beta",
                 developerId: user.uid,
                 studioName: userData.studioName || "Independent Developer",
-                createAt: new Date()
+                createdAt: new Date()
             });
 
             const newProjectData = {
                 id: docRef.id,
                 name: newProjectName.trim(),
-                developerId: user.uid,
-                studioName: userData.studioName || "Independent Developer",
+                platform: projectPlatform,
+                keysAvailable: Number(projectKeysAmount)
             };
 
             setProjects(prev => [...prev, newProjectData]);
-            toast.success("Project created successfully!");
+            toast.success("Project published successfully!");
             setNewProjectName('');
+            setProjectPlatform('');
+            setProjectKeysAmount('');
+            setSystemRequirements('');
+            setRewards('');
+            setEndDate('');
+            setProjectVersion('');
             setIsProjectModalOpen(false);
         }
 
@@ -233,6 +252,10 @@ export default function Profile() {
                                             <div key={project.id} className={`${styles.projectCardItem} ${isMain ? styles.mainProjectCard : ''}`}>
                                                 <div className={styles.projectInfoText}>
                                                     <h4>{project.name}</h4>
+                                                    <div className={styles.projectMetadata}>
+                                                        <span className={styles.platformTag}>🎮 {project.platform || "N/A"}</span>
+                                                        <span className={styles.keysTag}>🔑 {project.keysAvailable ?? 0} keys left</span>
+                                                    </div>
                                                     {isMain && <span className={styles.mainBadge}>👑 Main Project</span>}
                                                 </div>
                                                 {!isMain && (
@@ -255,8 +278,9 @@ export default function Profile() {
                                 <div className={styles.modalContent}>
                                     <h3>Create New Project</h3>
                                     <form onSubmit={handleCreateProject}>
+
                                         <div className={styles.modalInputGroup}>
-                                            <label>Project Name:</label>
+                                            <label>Project Name *</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. SuperCars Extreme Racing"
@@ -265,6 +289,78 @@ export default function Profile() {
                                                 required
                                             />
                                         </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Testing Platform *</label>
+                                            <select
+                                                value={projectPlatform}
+                                                onChange={(e) => setProjectPlatform(e.target.value)}
+                                                required
+                                                className={styles.modalSelect}
+                                            >
+                                                <option value="">Select platform...</option>
+                                                <option value="PC">PC</option>
+                                                <option value="Consola">Console</option>
+                                                <option value="Android">Android</option>
+                                                <option value="iOS">iOS</option>
+                                            </select>
+                                        </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Available Keys *</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                placeholder="e.g. 100"
+                                                value={projectKeysAmount}
+                                                onChange={(e) => setProjectKeysAmount(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>System Requirements *</label>
+                                            <textarea
+                                                placeholder="e.g. GTX 1060, 16GB RAM, 20GB Storage"
+                                                value={systemRequirements}
+                                                onChange={(e) => setSystemRequirements(e.target.value)}
+                                                required
+                                                className={styles.modalTextarea}
+                                            />
+                                        </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Tester Rewards / Payment *</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. In-game exclusive skin / 10€ Gift Card"
+                                                value={rewards}
+                                                onChange={(e) => setRewards(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Testing End Date *</label>
+                                            <input
+                                                type="date"
+                                                value={endDate}
+                                                onChange={(e) => setEndDate(e.target.value)}
+                                                required
+                                                className={styles.modalDateInput}
+                                            />
+                                        </div>
+
+                                        <div className={styles.modalInputGroup}>
+                                            <label>Project Version (Optional)</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. Beta v1.0.4"
+                                                value={projectVersion}
+                                                onChange={(e) => setProjectVersion(e.target.value)}
+                                            />
+                                        </div>
+
                                         <div className={styles.modalActions}>
                                             <button type="submit" className={styles.saveBtn}>Create</button>
                                             <button type="button" onClick={() => setIsProjectModalOpen(false)} className={styles.cancelBtn}>Cancel</button>
