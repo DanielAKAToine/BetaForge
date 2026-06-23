@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase/config';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import styles from './ExploreProjects.module.css';
@@ -34,8 +34,7 @@ export default function ExploreProjects() {
                 const querySnapshot = await getDocs(collection(db, "projects"));
                 const list = [];
 
-                // Log útil para veres na consola se o Firebase está a responder
-                console.log("Projetos encontrados no Firestore:", querySnapshot.size);
+                console.log("Projects found on Firestone:", querySnapshot.size);
 
                 querySnapshot.forEach((doc) => {
                     list.push({ id: doc.id, ...doc.data() });
@@ -51,8 +50,42 @@ export default function ExploreProjects() {
         fetchProjects();
     }, []);
 
-    const handleApply = async (projectId, projectName) => {
-        toast.info(`Application sent for ${projectName}`);
+    const handleApply = async (projectId, projectName, developerId) => {
+        try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                toast.error("You must be logged in to apply.");
+                return;
+            }
+
+            const q = query(
+                collection(db, "applications"),
+                where("projectId", "==", projectId),
+                where("playerUid", "==", currentUser.uid)
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                toast.warn("You have already applied for this project!");
+                return;
+            }
+            await addDoc(collection(db, "applications"), {
+                projectId: projectId,
+                projectName: projectName,
+                developerId: developerId || "",
+                playerUid: currentUser.uid,
+                playerEmail: currentUser.email,
+                status: "pending",
+                appliedAt: new Date(),
+                keyAssigned: ""
+            });
+
+            toast.success(`⚡ Application sent for ${projectName}!`);
+        } catch (error) {
+            console.error("Error saving application:", error);
+            toast.error("Failed to submit application.");
+        }
     };
 
     if (loading) {
