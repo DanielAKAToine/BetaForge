@@ -1,0 +1,179 @@
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.title {
+    color: #ff0055;
+    text-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+.subtitle {
+    color: #888;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+}
+
+.noData {
+    color: #555;
+    font-style: italic;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+    border-color: #333;
+}
+
+.card.pending {
+    border-left: 4px solid #ffaa00;
+}
+
+.card.approved {
+    border-left: 4px solid #00ffaa;
+}
+
+.card.rejected {
+    border-left: 4px solid #ff0055;
+    opacity: 0.5;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.cardHeader h3 {
+    margin: 0 0 5px 0;
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.testerEmail {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.testerEmail span {
+    color: #00f2fe;
+}
+
+.statusBadge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.statusBadge.pending {
+    background: rgba(255, 170, 0, 0.1);
+    color: #ffaa00;
+    border: 1px solid #ffaa00;
+}
+
+.statusBadge.approved {
+    background: rgba(0, 255, 170, 0.1);
+    color: #00ffaa;
+    border: 1px solid #00ffaa;
+}
+
+.statusBadge.rejected {
+    background: rgba(255, 0, 85, 0.1);
+    color: #ff0055;
+    border: 1px solid #ff0055;
+}
+
+.cardActions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.approveBtn {
+    background: #00ffaa;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+
+.approveBtn:hover {
+    box-shadow: 0 0 12px #00ffaa;
+}
+
+.rejectBtn {
+    background: transparent;
+    color: #ff0055;
+    border: 1px solid #ff0055;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.rejectBtn:hover {
+    background: rgba(255, 0, 85, 0.1);
+}
+
+.keyBox {
+    background: #070707;
+    border: 1px dashed #00ffaa;
+    padding: 12px;
+    border-radius: 6px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.keyBox code {
+    color: #00f2fe;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+}
+
+.rejectedText {
+    color: #444;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.loader {
+    text-align: center;
+    color: #ff0055;
+    font-weight: bold;
+    margin-top: 80px;
+    font-size: 1.2rem;
+}

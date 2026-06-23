@@ -9,6 +9,7 @@ import BackgroundSlider from './components/Background';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ExploreProjects from './pages/ExploreProjects';
+import Applications from './pages/Applications';
 
 export default function App() {
     return (
@@ -23,6 +24,7 @@ export default function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/explore" element={<ExploreProjects />} />
+                    <Route path="/applications" element={<Applications />} />
                 </Routes>
             </div>
             <ToastContainer position="top-center" autoClose={3000} theme="dark" />

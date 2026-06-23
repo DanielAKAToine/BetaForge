@@ -63,6 +63,18 @@ export default function Navbar() {
                 <li>
                     <Link to="/" className={styles.navLink}>Home</Link>
                 </li>
+                <li>
+                    <Link to="/explore" className={styles.navLink}>Available Projects</Link>
+                </li>
+
+                {user && user.profileType === 'developer' && (
+                    <li>
+                        <Link to="/applications" className={styles.navLink} style={{ color: '#ff0055', fontWeight: 'bold' }}>
+                            Applications
+                        </Link>
+                    </li>
+                )}
+
                 {user && (
                     <li>
                         <Link to="/profile" className={styles.navLink}>Profile</Link>

@@ -142,7 +142,7 @@ export default function ExploreProjects() {
                                 {userRole === 'player' ? (
                                     <button
                                         className={styles.applyBtn}
-                                        onClick={() => handleApply(project.id, project.name)}
+                                        onClick={() => handleApply(project.id, project.name, project.developerId)}
                                         disabled={project.keysAvailable <= 0}
                                     >
                                         {project.keysAvailable > 0 ? "⚡ Apply for Playtest" : "❌ Out of Keys"}
