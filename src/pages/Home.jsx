@@ -1,6 +1,8 @@
 import styles from './Home.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+    const navigate = useNavigate();
     return (
         <div className={styles.homeContainer}>
             <section className={styles.heroContainer}>
@@ -8,7 +10,11 @@ export default function Home() {
                 <p>The ultimate forge for game developers and passionate testers.
                     Publish your projects, gather feedback, and forge the future of gaming.</p>
 
-                <button className={styles.ctaBtn}>Explore Projects</button>
+                <button
+                    className={styles.ctaBtn}
+                    onClick={() => navigate('/explore')}>
+                    Explore Projects
+                </button>
             </section>
 
             <div className={styles.featuresGrid}>
