@@ -174,3 +174,35 @@
     margin-top: 100px;
     font-weight: bold;
 }
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.favoriteBtn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.2s ease-in-out;
+}
+
+.favoriteBtn:hover {
+    color: #ffd700;
+    transform: scale(1.15);
+}
+
+.activeFavorite {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+
+.favoritedCard {
+    border-color: rgba(255, 215, 0, 0.3) !important;
+}
