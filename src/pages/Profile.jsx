@@ -5,13 +5,13 @@ import { doc, getDoc, updateDoc, collection, addDoc, where, query, getDocs } fro
 import { toast } from 'react-toastify';
 import styles from './Profile.module.css';
 
-
 export default function Profile() {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [studioName, setStudioName] = useState('');
     const [editingStudio, setEditingStudio] = useState(false);
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+    const [editingProjectId, setEditingProjectId] = useState(null);
     const [newProjectName, setNewProjectName] = useState('');
     const [projects, setProjects] = useState([]);
     const [projectPlatform, setProjectPlatform] = useState('');
@@ -45,8 +45,7 @@ export default function Profile() {
                     }
                 }
                 catch (error) {
-                    console.error("Could'nt load the profile data", error);
-
+                    console.error("Couldn't load the profile data", error);
                 }
             }
             setLoading(false);
@@ -56,14 +55,12 @@ export default function Profile() {
     }, []);
 
     const handleResetPassword = async () => {
-
         try {
             const user = auth.currentUser;
             if (!user || !user.email) {
                 toast.error("User email not found");
                 return;
             }
-
             await sendPasswordResetEmail(auth, user.email);
             toast.success("Password reset email sent! Check your inbox.");
         }
@@ -73,10 +70,8 @@ export default function Profile() {
         }
     };
 
-
     const handleUpdateStudio = async (e) => {
         e.preventDefault();
-
         try {
             const user = auth.currentUser;
             const docRef = doc(db, "users", user.uid);
@@ -104,7 +99,7 @@ export default function Profile() {
 
             await updateDoc(docRef, {
                 studioName: "",
-                devType: 'individual' // Altera o tipo de dev para individual/indie
+                devType: 'individual'
             });
 
             setUserData(prev => ({ ...prev, studioName: "", devType: 'individual' }));
@@ -117,7 +112,31 @@ export default function Profile() {
         }
     };
 
-    const handleCreateProject = async (e) => {
+    const handleOpenEditModal = (project) => {
+        setEditingProjectId(project.id);
+        setNewProjectName(project.name);
+        setProjectPlatform(project.platform || '');
+        setProjectKeysAmount(project.keysAvailable ?? '');
+        setSystemRequirements(project.systemRequirements || '');
+        setRewards(project.rewards || '');
+        setEndDate(project.endDate || '');
+        setProjectVersion(project.version || '');
+        setIsProjectModalOpen(true);
+    };
+
+    const handleCloseProjectModal = () => {
+        setIsProjectModalOpen(false);
+        setEditingProjectId(null);
+        setNewProjectName('');
+        setProjectPlatform('');
+        setProjectKeysAmount('');
+        setSystemRequirements('');
+        setRewards('');
+        setEndDate('');
+        setProjectVersion('');
+    };
+
+    const handleSaveProject = async (e) => {
         e.preventDefault();
 
         if (!newProjectName.trim() || !projectPlatform || !projectKeysAmount || !systemRequirements.trim() || !rewards.trim() || !endDate) {
@@ -127,7 +146,7 @@ export default function Profile() {
 
         try {
             const user = auth.currentUser;
-            const docRef = await addDoc(collection(db, "projects"), {
+            const projectData = {
                 name: newProjectName.trim(),
                 platform: projectPlatform,
                 keysAvailable: Number(projectKeysAmount),
@@ -137,37 +156,33 @@ export default function Profile() {
                 version: projectVersion.trim() || "Alpha/Beta",
                 developerId: user.uid,
                 studioName: userData.studioName || "Independent Developer",
-                createdAt: new Date()
-            });
-
-            const newProjectData = {
-                id: docRef.id,
-                name: newProjectName.trim(),
-                platform: projectPlatform,
-                keysAvailable: Number(projectKeysAmount)
             };
 
-            setProjects(prev => [...prev, newProjectData]);
-            toast.success("Project published successfully!");
-            setNewProjectName('');
-            setProjectPlatform('');
-            setProjectKeysAmount('');
-            setSystemRequirements('');
-            setRewards('');
-            setEndDate('');
-            setProjectVersion('');
-            setIsProjectModalOpen(false);
-        }
+            if (editingProjectId) {
+                const projectDocRef = doc(db, "projects", editingProjectId);
+                await updateDoc(projectDocRef, projectData);
 
-        catch (error) {
-            console.error("Error creating project", error);
-            toast.error("Failed to create project. Try again later.");
+                setProjects(prev => prev.map(proj =>
+                    proj.id === editingProjectId ? { id: editingProjectId, ...projectData } : proj
+                ));
+                toast.success("Project updated successfully!");
+            } else {
+                const docRef = await addDoc(collection(db, "projects"), {
+                    ...projectData,
+                    createdAt: new Date()
+                });
+
+                setProjects(prev => [...prev, { id: docRef.id, ...projectData }]);
+                toast.success("Project published successfully!");
+            }
+
+            handleCloseProjectModal();
         }
-        finally {
-            setLoading(false);
+        catch (error) {
+            console.error("Error saving project", error);
+            toast.error("Failed to save project. Try again later.");
         }
     };
-
 
     const handleSetMainProject = async (projectName) => {
         try {
@@ -258,11 +273,17 @@ export default function Profile() {
                                                     </div>
                                                     {isMain && <span className={styles.mainBadge}>👑 Main Project</span>}
                                                 </div>
-                                                {!isMain && (
+                                                <div className={styles.projectActionsGrid}>
                                                     <button
-                                                        onClick={() => handleSetMainProject(project.name)}
-                                                        className={styles.setMainBtn}> Set as Main </button>
-                                                )}
+                                                        onClick={() => handleOpenEditModal(project)}
+                                                        className={styles.editProjectIconBtn}>✏️ Edit</button>
+
+                                                    {!isMain && (
+                                                        <button
+                                                            onClick={() => handleSetMainProject(project.name)}
+                                                            className={styles.setMainBtn}> Set as Main </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -276,8 +297,8 @@ export default function Profile() {
                         {isProjectModalOpen && (
                             <div className={styles.modalOverlay}>
                                 <div className={styles.modalContent}>
-                                    <h3>Create New Project</h3>
-                                    <form onSubmit={handleCreateProject}>
+                                    <h3>{editingProjectId ? "Edit Project" : "Create New Project"}</h3>
+                                    <form onSubmit={handleSaveProject}>
 
                                         <div className={styles.modalInputGroup}>
                                             <label>Project Name *</label>
@@ -362,8 +383,10 @@ export default function Profile() {
                                         </div>
 
                                         <div className={styles.modalActions}>
-                                            <button type="submit" className={styles.saveBtn}>Create</button>
-                                            <button type="button" onClick={() => setIsProjectModalOpen(false)} className={styles.cancelBtn}>Cancel</button>
+                                            <button type="submit" className={styles.saveBtn}>
+                                                {editingProjectId ? "Save Changes" : "Create"}
+                                            </button>
+                                            <button type="button" onClick={handleCloseProjectModal} className={styles.cancelBtn}>Cancel</button>
                                         </div>
                                     </form>
                                 </div>
@@ -372,10 +395,9 @@ export default function Profile() {
                     </div>
                 )}
             </div>
-        </div >
+        </div>
     );
 }
-
 
 
 
