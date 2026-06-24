@@ -22,7 +22,7 @@ export default function Login() {
 
         if (!email || !password) {
             setError("Please fill in all fields.");
-            setLoading(false);
+            loading(false);
             return;
         }
         setLoading(true);
@@ -38,6 +38,8 @@ export default function Login() {
                 setLoading(false);
                 return;
             }
+
+            localStorage.setItem('login_time', Date.now().toString());
             toast.success("Login successful! Welcome to BetaForge!");
             navigate("/");
         }

@@ -11,10 +11,12 @@ import ForgotPassword from './pages/ForgotPassword';
 import ExploreProjects from './pages/ExploreProjects';
 import Applications from './pages/Applications';
 import PlayerKeys from './pages/PlayerKeys';
+import SessionTimeout from './components/SessionTImeOut';
 
 export default function App() {
     return (
         <BrowserRouter>
+            <SessionTimeout />
             <BackgroundSlider />
             <Navbar />
             <div style={{ padding: '20px' }}>
