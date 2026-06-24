@@ -18,7 +18,6 @@ export default function Register() {
     const [birthdate, setBirthdate] = useState('');
     const [profileType, setProfileType] = useState('player');
     const [loading, setLoading] = useState(false);
-
     const [devType, setDevType] = useState('independent');
     const [mainProject, setMainProject] = useState('');
     const [studioName, setStudioName] = useState('');
@@ -69,6 +68,8 @@ export default function Register() {
             setError('Are you still alive? Please enter a valid birthdate.');
             return;
         }
+
+        setLoading(true);
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -186,7 +187,7 @@ export default function Register() {
                 </div>
 
                 {profileType === 'developer' && (
-                    <div className={styles.formGroup}>
+                    <div className={styles.developerSection}>
                         <h3>Developer Details</h3>
                         <div className={styles.formGroup}>
                             <label>Developer Type *</label>
@@ -218,10 +219,11 @@ export default function Register() {
                         </div>
                     </div>
                 )}
-                <button type="submit" className={styles.submitButton} disabçed={loading}>
-                    {loading ? 'Creating Account...' : 'Register Account'}
+
+                <button type="submit" className={styles.submitBtn} disabled={loading}>
+                    {loading ? '⚡ Creating Account...' : '⚡ Register Account'}
                 </button>
             </form>
         </div>
     );
-}   
+}

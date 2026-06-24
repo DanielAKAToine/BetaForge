@@ -20,6 +20,13 @@ export default function Profile() {
     const [rewards, setRewards] = useState('');
     const [endDate, setEndDate] = useState('');
     const [projectVersion, setProjectVersion] = useState('');
+    const [playerApps, setPlayerApps] = useState([]);
+    const [discord, setDiscord] = useState('');
+    const [os, setOs] = useState('');
+    const [cpu, setCpu] = useState('');
+    const [gpu, setGpu] = useState('');
+    const [ram, setRam] = useState('');
+    const [isSavingHardware, setIsSavingHardware] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -30,6 +37,7 @@ export default function Profile() {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         setUserData(data);
+
                         if (data.studioName)
                             setStudioName(data.studioName);
 
@@ -41,6 +49,28 @@ export default function Profile() {
                                 projectsList.push({ id: doc.id, ...doc.data() });
                             });
                             setProjects(projectsList);
+                        }
+
+                        if (data.profileType === 'player' || data.profileType === 'tester') {
+                            setDiscord(data.discord || '');
+                            setOs(data.hardware?.os || '');
+                            setCpu(data.hardware?.cpu || '');
+                            setGpu(data.hardware?.gpu || '');
+                            setRam(data.hardware?.ram || '');
+
+
+                            const qApps = query(collection(db, "applications"), where("playerUid", "==", currentUser.uid));
+                            const querySnapshotApps = await getDocs(qApps);
+                            const appsList = [];
+                            querySnapshotApps.forEach((doc) => {
+                                const appData = doc.data();
+                                appsList.push({
+                                    id: doc.id,
+                                    projectName: appData.projectName,
+                                    status: appData.status
+                                });
+                            });
+                            setPlayerApps(appsList);
                         }
                     }
                 }
@@ -67,6 +97,35 @@ export default function Profile() {
         catch (error) {
             console.error("Error sending reset email", error);
             toast.error("Failed to send reset email. Try again later.");
+        }
+    };
+
+    const handleUpdateHardware = async (e) => {
+        e.preventDefault();
+        setIsSavingHardware(true);
+        try {
+            const user = auth.currentUser;
+            const docRef = doc(db, "users", user.uid);
+
+            const hardwareData = {
+                discord: discord.trim(),
+                hardware: {
+                    os: os.trim(),
+                    cpu: cpu.trim(),
+                    gpu: gpu.trim(),
+                    ram: ram.trim()
+                }
+            };
+
+            await updateDoc(docRef, hardwareData);
+
+            setUserData(prev => ({ ...prev, ...hardwareData }));
+            toast.success("Gaming profile updated successfully!");
+        } catch (error) {
+            console.error("Error updating hardware:", error);
+            toast.error("Failed to update gaming profile.");
+        } finally {
+            setIsSavingHardware(false);
         }
     };
 
@@ -216,6 +275,68 @@ export default function Profile() {
                     <p><strong>Birthdate: </strong> {userData.birthdate}</p>
                     <button onClick={handleResetPassword} className={styles.passwordBtn}>🔒 Change Password</button>
                 </div>
+
+                {(userData.profileType === 'player' || userData.profileType === 'tester') && (
+                    <div className={styles.playerSection}>
+                        <hr className={styles.divider} />
+
+                        <div className={styles.hardwareSection}>
+                            <h3>🖥️ Gaming Profile & Specs</h3>
+                            <form onSubmit={handleUpdateHardware} className={styles.hardwareForm}>
+                                <div className={styles.formRow}>
+                                    <div className={styles.inputGroup}>
+                                        <label>Discord Tag</label>
+                                        <input type="text" value={discord} onChange={(e) => setDiscord(e.target.value)} placeholder="e.g. daniel_dev" />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label>Operating System</label>
+                                        <input type="text" value={os} onChange={(e) => setOs(e.target.value)} placeholder="e.g. Windows 11 / macOS" />
+                                    </div>
+                                </div>
+
+                                <div className={styles.formRow}>
+                                    <div className={styles.inputGroup}>
+                                        <label>Processor (CPU)</label>
+                                        <input type="text" value={cpu} onChange={(e) => setCpu(e.target.value)} placeholder="e.g. AMD Ryzen 5 5600X" />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label>Graphics Card (GPU)</label>
+                                        <input type="text" value={gpu} onChange={(e) => setGpu(e.target.value)} placeholder="e.g. NVIDIA RTX 4060" />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label>RAM Memory</label>
+                                        <input type="text" value={ram} onChange={(e) => setRam(e.target.value)} placeholder="e.g. 16GB / 32GB" />
+                                    </div>
+                                </div>
+
+                                <button type="submit" className={styles.saveHardwareBtn} disabled={isSavingHardware}>
+                                    {isSavingHardware ? "Saving..." : "💾 Save Specs"}
+                                </button>
+                            </form>
+                        </div>
+
+                        <hr className={styles.divider} />
+
+                        <div className={styles.gamingHubSection}>
+                            <h3>🎮 My Testing Games</h3>
+                            {playerApps.length === 0 ? (
+                                <p className={styles.noProjects}>You haven't applied to any playtests yet.</p>
+                            ) : (
+                                <div className={styles.miniAppsGrid}>
+                                    {playerApps.map((app) => (
+                                        <div key={app.id} className={styles.miniAppCard}>
+                                            <span className={styles.miniAppName}>{app.projectName}</span>
+                                            <span className={`${styles.miniStatusBadge} ${styles[app.status?.toLowerCase()] || ''}`}>
+                                                {app.status || 'Pending'}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {userData.profileType === 'developer' && (
                     <div className={styles.devSection}>
                         <h3>Developer Management</h3>
@@ -398,7 +519,3 @@ export default function Profile() {
         </div>
     );
 }
-
-
-
-

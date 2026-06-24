@@ -133,6 +133,22 @@ export default function Applications() {
                                 </span>
                             </div>
 
+                            <div style={{
+                                background: 'rgba(0, 0, 0, 0.2)',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                margin: '12px 0',
+                                fontSize: '0.9rem',
+                                borderLeft: '3px solid #ffaa00'
+                            }}>
+                                <strong style={{ color: '#ffaa00', display: 'block', marginBottom: '4px', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                                    💬 Tester Motivation / Specs:
+                                </strong>
+                                <p style={{ margin: 0, color: '#e4e4e7', lineHeight: '1.4' }}>
+                                    {app.conteudo || "No motivation provided."}
+                                </p>
+                            </div>
+
                             <div className={styles.cardActions}>
                                 {app.status === 'pending' ? (
                                     <>

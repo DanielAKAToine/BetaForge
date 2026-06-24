@@ -10,6 +10,10 @@ export default function ExploreProjects() {
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState(null);
     const [favorites, setFavorites] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [motivation, setMotivation] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -84,17 +88,17 @@ export default function ExploreProjects() {
         }
     };
 
-    const handleApply = async (projectId, projectName, developerId) => {
-        try {
-            const currentUser = auth.currentUser;
-            if (!currentUser) {
-                toast.error("You must be logged in to apply.");
-                return;
-            }
+    const handleApplyClick = async (project) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            toast.error("You must be logged in to apply.");
+            return;
+        }
 
+        try {
             const q = query(
                 collection(db, "applications"),
-                where("projectId", "==", projectId),
+                where("projectId", "==", project.id),
                 where("playerUid", "==", currentUser.uid)
             );
 
@@ -104,21 +108,52 @@ export default function ExploreProjects() {
                 toast.warn("You have already applied for this project!");
                 return;
             }
+
+            setSelectedProject(project);
+            setMotivation('');
+            setIsModalOpen(true);
+
+        } catch (error) {
+            console.error("Error checking existing application:", error);
+            toast.error("Something went wrong. Please try again.");
+        }
+    };
+
+    const handleSubmitApplication = async (e) => {
+        e.preventDefault();
+
+        if (!motivation.trim()) {
+            toast.error("Please enter your motivation or specs. It cannot be empty!");
+            return;
+        }
+
+        const currentUser = auth.currentUser;
+        if (!currentUser || !selectedProject) return;
+
+        setSubmitting(true);
+
+        try {
             await addDoc(collection(db, "applications"), {
-                projectId: projectId,
-                projectName: projectName,
-                developerId: developerId || "",
+                projectId: selectedProject.id,
+                projectName: selectedProject.name,
+                developerId: selectedProject.developerId || "",
                 playerUid: currentUser.uid,
                 playerEmail: currentUser.email,
+                conteudo: motivation.trim(),
                 status: "pending",
                 appliedAt: new Date(),
                 keyAssigned: ""
             });
 
-            toast.success(`⚡ Application sent for ${projectName}!`);
+            toast.success(`⚡ Application sent for ${selectedProject.name}!`);
+            setIsModalOpen(false);
+            setSelectedProject(null);
+            setMotivation('');
         } catch (error) {
             console.error("Error saving application:", error);
             toast.error("Failed to submit application.");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -199,7 +234,7 @@ export default function ExploreProjects() {
                                     {userRole === 'player' ? (
                                         <button
                                             className={styles.applyBtn}
-                                            onClick={() => handleApply(project.id, project.name, project.developerId)}
+                                            onClick={() => handleApplyClick(project)}
                                             disabled={project.keysAvailable <= 0}
                                         >
                                             {project.keysAvailable > 0 ? "⚡ Apply for Playtest" : "❌ Out of Keys"}
@@ -213,6 +248,52 @@ export default function ExploreProjects() {
                             </div>
                         );
                     })}
+                </div>
+            )}
+
+            {isModalOpen && selectedProject && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <h3>Apply for {selectedProject.name}</h3>
+                        <p className={styles.modalSubtitle}>
+                            The developer needs to know your motivation or system specs before assigning a testing key.
+                        </p>
+
+                        <form onSubmit={handleSubmitApplication}>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="motivation">
+                                    Why do you want to test this game? / PC or Console Specs:
+                                </label>
+                                <textarea
+                                    id="motivation"
+                                    rows="5"
+                                    value={motivation}
+                                    onChange={(e) => setMotivation(e.target.value)}
+                                    placeholder="Examples: 'I love roguelikes and I can test daily.' or 'PC Specs: RTX 3060, Ryzem 5, 16GB RAM...'"
+                                    disabled={submitting}
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles.modalActions}>
+                                <button
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={() => setIsModalOpen(false)}
+                                    disabled={submitting}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className={styles.submitBtn}
+                                    disabled={submitting}
+                                >
+                                    {submitting ? "Sending..." : "Submit Application 🚀"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>

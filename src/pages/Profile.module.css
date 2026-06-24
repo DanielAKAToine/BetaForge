@@ -409,30 +409,158 @@
 }
 
 .projectActionsGrid {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: flex-end;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .editProjectIconBtn {
-    background: transparent;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 6px 14px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease-in-out;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease-in-out;
 }
 
 .editProjectIconBtn:hover {
-    border-color: #00f3ff; /* Altera para a tua cor ciberpunk preferida (Cyan) */
-    color: #00f3ff;
-    background: rgba(0, 243, 255, 0.05);
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+  border-color: #00f3ff;
+  color: #00f3ff;
+  background: rgba(0, 243, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.playerSection {
+  width: 100%;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.hardwareSection h3,
+.gamingHubSection h3 {
+  color: #00f0ff;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hardwareForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formRow {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.inputGroup {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inputGroup label {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.inputGroup input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  padding: 10px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: #00f0ff;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+.saveHardwareBtn {
+  background: linear-gradient(45deg, #00f0ff, #0077ff);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.saveHardwareBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
+}
+
+.saveHardwareBtn:disabled {
+  background: #555;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.miniAppsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.miniAppCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.miniAppName {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.miniStatusBadge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #444;
+}
+
+.miniStatusBadge.approved {
+  background: #00ff66;
+  color: #000;
+}
+
+.miniStatusBadge.pending {
+  background: #ffaa00;
+  color: #000;
+}
+
+.miniStatusBadge.rejected {
+  background: #ff3333;
+  color: #fff;
 }
