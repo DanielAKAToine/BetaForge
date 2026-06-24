@@ -75,6 +75,14 @@ export default function Navbar() {
                     </li>
                 )}
 
+                {user && user.profileType === 'player' && (
+                    <li>
+                        <Link to="/myapplications" className={styles.navLink} style={{ color: '#00f2fe', fontWeight: 'bold' }}>
+                            My Applications
+                        </Link>
+                    </li>
+                )}
+
                 {user && (
                     <li>
                         <Link to="/profile" className={styles.navLink}>Profile</Link>

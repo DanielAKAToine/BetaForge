@@ -57,7 +57,8 @@ export default function Applications() {
             const appRef = doc(db, "applications", appId);
             await updateDoc(appRef, {
                 status: newStatus,
-                keyAssigned: generatedKey
+                keyAssigned: generatedKey,
+                approvedAt: newStatus === 'approved' ? new Date() : null
             });
 
             if (newStatus === 'approved') {
