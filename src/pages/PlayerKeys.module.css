@@ -169,15 +169,18 @@
 }
 
 .reviewBtn:hover:not(:disabled) {
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
-    transform: scale(1.02);
+    background-color: #00bcff;
+    box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
+    transform: translateY(-1px);
 }
 
 .reviewBtn:disabled {
-    background: #333;
-    color: #666;
-    cursor: not-allowed;
-    box-shadow: none;
+    background-color: #1a1a2e !important;
+    color: #666666 !important;
+    border: 1px solid #33334d !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .loader {
@@ -385,3 +388,4 @@
 .specsGridFull input:focus {
     border-color: #00f2fe;
 }
+

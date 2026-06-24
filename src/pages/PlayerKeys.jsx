@@ -49,23 +49,38 @@ export default function PlayerKeys() {
     const [bugsReport, setBugsReport] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [specs, setSpecs] = useState({ cpu: '', gpu: '', ram: '', os: '', deviceModel: '' });
+    const [reviewedProjectIds, setReviewedProjectIds] = useState([]);
+
 
     const fetchMyApplications = async () => {
         try {
             const currentUser = auth.currentUser;
             if (!currentUser) return;
 
-            const q = query(
+            const qApps = query(
                 collection(db, "applications"),
                 where("playerUid", "==", currentUser.uid)
             );
 
-            const querySnapshot = await getDocs(q);
+            const querySnapshot = await getDocs(qApps);
             const list = [];
             querySnapshot.forEach((doc) => {
                 list.push({ id: doc.id, ...doc.data() });
             });
+
             setMyApps(list);
+
+            const qReviews = query(
+                collection(db, "reviews"),
+                where("playerUid", "==", currentUser.uid)
+            );
+            const querySnapshotReviews = await getDocs(qReviews);
+            const reviewedIds = [];
+            querySnapshotReviews.forEach((doc) => {
+                reviewedIds.push(doc.data().projectId);
+            });
+            setReviewedProjectIds(reviewedIds);
+
         } catch (error) {
             console.error(error);
             toast.error("Failed to load dashboard.");
@@ -139,6 +154,7 @@ export default function PlayerKeys() {
             });
 
             toast.success("Review and technical specs transmitted successfully!");
+            setReviewedProjectIds(prev => [...prev, activeApp.projectId]);
             closeReviewModal();
         } catch (error) {
             console.error("Error submitting review:", error);
@@ -183,10 +199,13 @@ export default function PlayerKeys() {
                                             </div>
                                             <button
                                                 className={styles.reviewBtn}
-                                                disabled={isExpired}
+                                                disabled={isExpired || reviewedProjectIds.includes(app.projectId)}
                                                 onClick={() => openReviewModal(app)}
                                             >
-                                                ✍️ Submit Review & Bugs
+                                                {reviewedProjectIds.includes(app.projectId)
+                                                    ? "✅ Review already submitted"
+                                                    : "✍️ Submit Review & Bugs"
+                                                }
                                             </button>
                                         </div>
                                     )}
