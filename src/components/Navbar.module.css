@@ -4,9 +4,7 @@
   align-items: center;
   padding: 15px 40px;
   background-color: rgba(26, 26, 26, 0.75);
-  /* Semitransparente para ver o fundo */
   backdrop-filter: blur(8px);
-  /* Efeito de vidro desfocado */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
