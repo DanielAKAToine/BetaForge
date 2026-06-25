@@ -8,3 +8,78 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+
+  nav,
+  .navbar,
+  [class*="navbar"],
+  [class*="Nav"] {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 15px !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+
+  nav div,
+  nav ul,
+  [class*="navbar"] div,
+  [class*="navbar"] ul,
+  [class*="links"] {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+
+  nav a,
+  .navbar a,
+  [class*="nav"] a,
+  nav button,
+  .navbar button {
+    font-size: 15px !important;
+    padding: 6px 12px !important;
+    text-align: center !important;
+    width: auto !important;
+    display: inline-block !important;
+  }
+
+
+  [class*="Container"],
+  [class*="card"] {
+    width: 90% !important;
+    max-width: 450px !important;
+    margin: 20px auto !important;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+
+  .row>div,
+  .row>input {
+    width: 100% !important;
+  }
+}
